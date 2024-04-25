@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -143,19 +144,68 @@ fun MemoryGameScreen(mainViewModel: MainViewModel = viewModel()) {
     when(shadifyUiState.value){
         ShadifyApiStatus.DONE ->Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
             Text(text = "Match The Cards")
-            LazyHorizontalGrid(rows = GridCells.Fixed(mainUiState.value.memoryGame.width)) {
-                for (i in 0..<mainUiState.value.memoryGame.width){
-                    items(mainUiState.value.memoryGame.height-1) {
+            LazyHorizontalGrid(rows = GridCells.Fixed(6)) {
+                    items(4) {
                         MemoryCard(
-                            cardContent = mainUiState.value.memoryGame.grid[it][i],
+                            cardContent = mainUiState.value.memoryGame.grid[it][0],
                             onCardRotated = {
-                                listOfCards.add(it)
-                                resetRotations = false
+                                mainViewModel.cardFlip(it)
                             },
                             resetRotation = resetRotations
                         )
                     }
+                items(4) {
+                    MemoryCard(
+                        cardContent = mainUiState.value.memoryGame.grid[it][1],
+                        onCardRotated = {
+                            mainViewModel.cardFlip(it)
+                        },
+                        resetRotation = resetRotations
+                    )
                 }
+                items(4) {
+                    MemoryCard(
+                        cardContent = mainUiState.value.memoryGame.grid[it][2],
+                        onCardRotated = {
+                            listOfCards.add(it)
+                            resetRotations = false
+                        },
+                        resetRotation = resetRotations
+                    )
+                }
+                items(4) {
+                    MemoryCard(
+                        cardContent = mainUiState.value.memoryGame.grid[it][3],
+                        onCardRotated = {
+                            listOfCards.add(it)
+                            resetRotations = false
+                        },
+                        resetRotation = resetRotations
+                    )
+                }
+                items(4) {
+                    MemoryCard(
+                        cardContent = mainUiState.value.memoryGame.grid[it][4],
+                        onCardRotated = {
+                            listOfCards.add(it)
+                            resetRotations = false
+                        },
+                        resetRotation = resetRotations
+                    )
+                }
+                items(4) {
+                    MemoryCard(
+                        cardContent = mainUiState.value.memoryGame.grid[it][5],
+                        onCardRotated = {
+                            listOfCards.add(it)
+                            resetRotations = false
+                        },
+                        resetRotation = resetRotations
+                    )
+                }
+
+
+
 
 //                items(mainUiState.value.memoryGame.grid[2].size) {
 //                    MemoryCard(
