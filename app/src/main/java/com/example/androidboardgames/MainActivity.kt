@@ -131,78 +131,73 @@ fun ErrorScreen() {
 fun MemoryGameScreen(mainViewModel: MainViewModel = viewModel()) {
     val mainUiState = mainViewModel.mainUiState.collectAsState()
     val shadifyUiState = mainViewModel.status.collectAsState()
-    val listOfCards by rememberSaveable {
-        mutableStateOf(arrayListOf(""))
-    }
-    var resetRotations by rememberSaveable {
-        mutableStateOf(false)
-    }
-    LaunchedEffect(listOfCards.size >= 3){
-        resetRotations = true
-    }
-
+    val guessedCardsList = mainViewModel.correctlyGuessedCardsList.collectAsState()
+    val memoryGameAdapted = mainViewModel.memoryGameAdapted.collectAsState()
+    val resetRotations = mainViewModel.answerReset.collectAsState()
     when(shadifyUiState.value){
         ShadifyApiStatus.DONE ->Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
             Text(text = "Match The Cards")
             LazyHorizontalGrid(rows = GridCells.Fixed(6)) {
-                    items(4) {
+                    items(24) {
                         MemoryCard(
-                            cardContent = mainUiState.value.memoryGame.grid[it][0],
+                            cardContent = memoryGameAdapted.value[it],
                             onCardRotated = {
                                 mainViewModel.cardFlip(it)
                             },
-                            resetRotation = resetRotations
+                            resetRotation = resetRotations.value,
+                            isCardGuessedCorrectly = guessedCardsList.value[it],
+                            onCardsReset = { mainViewModel.cardsReset() }
                         )
                     }
-                items(4) {
-                    MemoryCard(
-                        cardContent = mainUiState.value.memoryGame.grid[it][1],
-                        onCardRotated = {
-                            mainViewModel.cardFlip(it)
-                        },
-                        resetRotation = resetRotations
-                    )
-                }
-                items(4) {
-                    MemoryCard(
-                        cardContent = mainUiState.value.memoryGame.grid[it][2],
-                        onCardRotated = {
-                            listOfCards.add(it)
-                            resetRotations = false
-                        },
-                        resetRotation = resetRotations
-                    )
-                }
-                items(4) {
-                    MemoryCard(
-                        cardContent = mainUiState.value.memoryGame.grid[it][3],
-                        onCardRotated = {
-                            listOfCards.add(it)
-                            resetRotations = false
-                        },
-                        resetRotation = resetRotations
-                    )
-                }
-                items(4) {
-                    MemoryCard(
-                        cardContent = mainUiState.value.memoryGame.grid[it][4],
-                        onCardRotated = {
-                            listOfCards.add(it)
-                            resetRotations = false
-                        },
-                        resetRotation = resetRotations
-                    )
-                }
-                items(4) {
-                    MemoryCard(
-                        cardContent = mainUiState.value.memoryGame.grid[it][5],
-                        onCardRotated = {
-                            listOfCards.add(it)
-                            resetRotations = false
-                        },
-                        resetRotation = resetRotations
-                    )
-                }
+//                items(4) {
+//                    MemoryCard(
+//                        cardContent = mainUiState.value.memoryGame.grid[it][1],
+//                        onCardRotated = {
+//                            mainViewModel.cardFlip(it)
+//                        },
+//                        resetRotation = resetRotations
+//                    )
+//                }
+//                items(4) {
+//                    MemoryCard(
+//                        cardContent = mainUiState.value.memoryGame.grid[it][2],
+//                        onCardRotated = {
+//                            listOfCards.add(it)
+//                            resetRotations = false
+//                        },
+//                        resetRotation = resetRotations
+//                    )
+//                }
+//                items(4) {
+//                    MemoryCard(
+//                        cardContent = mainUiState.value.memoryGame.grid[it][3],
+//                        onCardRotated = {
+//                            listOfCards.add(it)
+//                            resetRotations = false
+//                        },
+//                        resetRotation = resetRotations
+//                    )
+//                }
+//                items(4) {
+//                    MemoryCard(
+//                        cardContent = mainUiState.value.memoryGame.grid[it][4],
+//                        onCardRotated = {
+//                            listOfCards.add(it)
+//                            resetRotations = false
+//                        },
+//                        resetRotation = resetRotations
+//                    )
+//                }
+//                items(4) {
+//                    MemoryCard(
+//                        cardContent = mainUiState.value.memoryGame.grid[it][5],
+//                        onCardRotated = {
+//                            listOfCards.add(it)
+//                            resetRotations = false
+//                        },
+//                        resetRotation = resetRotations
+//                    )
+//                }
 
 
 
@@ -245,13 +240,19 @@ fun MemoryGameScreen(mainViewModel: MainViewModel = viewModel()) {
 }
 
 @Composable
-fun MemoryCard(cardContent:String, onCardRotated: (String) -> Unit, resetRotation: Boolean) {
+fun MemoryCard(cardContent:String, onCardRotated: (String) -> Unit, isCardGuessedCorrectly:Boolean, resetRotation: Boolean, onCardsReset: () -> Unit) {
     var rotated by remember {
         mutableStateOf(false)
     }
-    LaunchedEffect(resetRotation){
-        rotated = false
-    }
+//    LaunchedEffect(Unit){
+//        if(isCardGuessedCorrectly){
+//            rotated = true
+//        }else if (resetRotation){
+//            rotated = false
+//            onCardsReset()
+//        }
+//    }
+
     val imageResource  = when(cardContent){
         "a" -> R.drawable.icons8_iron_man
         "b" -> R.drawable.icons8_joker_dc
@@ -268,21 +269,23 @@ fun MemoryCard(cardContent:String, onCardRotated: (String) -> Unit, resetRotatio
         colors = CardDefaults.cardColors(MaterialTheme.colorScheme.primaryContainer),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
-        if (rotated){
+        if (isCardGuessedCorrectly){
             FrontCardLayout(imageResource)
-        }
-        else if (resetRotation){
+        } else if (resetRotation) {
+            rotated = false
             BackCardLayout {
                 rotated = true
                 onCardRotated(cardContent)
             }
-        } else{
+            onCardsReset()
+        } else if (rotated){
+            FrontCardLayout(imageResource)
+        } else {
             BackCardLayout {
                 rotated = true
                 onCardRotated(cardContent)
             }
         }
-
     }
 }
 @Composable
