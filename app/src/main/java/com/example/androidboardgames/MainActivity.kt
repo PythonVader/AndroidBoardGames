@@ -6,6 +6,8 @@ import android.widget.GridLayout
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.DrawableRes
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -37,6 +39,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -500,6 +503,10 @@ fun MemoryCard(cardContent:String, onCardRotated: (String) -> Unit, isCardGuesse
     var rotated by remember {
         mutableStateOf(false)
     }
+    val rotation by animateFloatAsState(targetValue = if(rotated) 180f else 0f,
+        animationSpec = tween(100), label = ""
+    )
+
 //    LaunchedEffect(Unit){
 //        if(isCardGuessedCorrectly){
 //            rotated = true
@@ -515,12 +522,18 @@ fun MemoryCard(cardContent:String, onCardRotated: (String) -> Unit, isCardGuesse
         "c" -> R.drawable.icons8_neo
         "d" -> R.drawable.icons8_android
         "e" -> R.drawable.icons8_walter_white
+        "f" -> R.drawable.icons8_homer_simpson
+        "g" -> R.drawable.icons8_genie
         else -> R.drawable.icons8_luigi
     }
     Card(
         modifier = Modifier
             .size(120.dp, 380.dp)
-            .padding(10.dp),
+            .padding(10.dp)
+            .graphicsLayer {
+                rotationY = rotation
+//                cameraDistance = 8 * density
+            },
         shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(MaterialTheme.colorScheme.primaryContainer),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
@@ -529,18 +542,18 @@ fun MemoryCard(cardContent:String, onCardRotated: (String) -> Unit, isCardGuesse
             FrontCardLayout(imageResource)
         } else if (resetRotation) {
             rotated = false
-            BackCardLayout {
+            BackCardLayout(rotation = rotation, onClicked = {
                 rotated = true
                 onCardRotated(cardContent)
-            }
+            })
             onCardsReset()
         } else if (rotated){
             FrontCardLayout(imageResource)
         } else {
-            BackCardLayout {
+            BackCardLayout(rotation = rotation, onClicked = {
                 rotated = true
                 onCardRotated(cardContent)
-            }
+            })
         }
     }
 }
@@ -553,10 +566,13 @@ fun FrontCardLayout(@DrawableRes painterRes: Int) {
     }
 }
 @Composable
-fun BackCardLayout(onClicked: () -> Unit) {
+fun BackCardLayout(onClicked: () -> Unit, rotation: Float) {
     Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier
         .fillMaxSize()
         .padding(8.dp)
+        .graphicsLayer {
+            rotationY = rotation
+        }
         .clickable { onClicked() },) {
         Image(painter = painterResource(id = R.drawable.baseline_question_mark_24), contentDescription = null)
     }
