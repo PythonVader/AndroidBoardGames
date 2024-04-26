@@ -8,6 +8,7 @@ import com.example.androidboardgames.network.ShadifyMathApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.forEach
 import kotlinx.coroutines.launch
 import kotlin.properties.Delegates
 
@@ -58,17 +59,49 @@ class MainViewModel: ViewModel(){
         _answerReset.value = false
     }
 
-    private val _correctlyGuessedCardsList= MutableStateFlow(arrayListOf(false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false))
+    private val _correctlyGuessedCardsList= MutableStateFlow(arrayListOf(false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false))
     val correctlyGuessedCardsList: StateFlow<ArrayList<Boolean>> = _correctlyGuessedCardsList.asStateFlow()
     private fun updateGuessedCardsList(guessedCardsPositions: ShadifySetPairPositions) {
         val positionInt: ArrayList<Int> = arrayListOf()
         guessedCardsPositions.positions.forEach {
-            positionInt.add(it[0]*it[1])
+            val indexAt = when(it.toList()){
+                listOf(1,1) -> 1
+                listOf(1,2) -> 2
+                listOf(1,3) -> 3
+                listOf(1,4) -> 4
+                listOf(1,5) -> 5
+                listOf(1,6) -> 6
+                listOf(2,1) -> 7
+                listOf(2,2) -> 8
+                listOf(2,3) -> 9
+                listOf(2,4) -> 10
+                listOf(2,5) -> 11
+                listOf(2,6) -> 12
+                listOf(3,1) -> 13
+                listOf(3,2) -> 14
+                listOf(3,3) -> 15
+                listOf(3,4) -> 16
+                listOf(3,5) -> 17
+                listOf(3,6) -> 18
+                listOf(4,1) -> 19
+                listOf(4,2) -> 20
+                listOf(4,3) -> 21
+                listOf(4,4) -> 22
+                listOf(4,5) -> 23
+                else -> 0
+            }
+            println("iNDEX rETURNED at $indexAt")
+            positionInt.add(indexAt)
         }
         println("items are at positions Should be ${guessedCardsPositions.positions.forEach { it.forEach { println(it) } }} ${positionInt.forEach { println(it) }}")
 
         positionInt.forEach { int ->
-            correctlyGuessedCardsList.value[int] = true
+            if (int == 0){
+                correctlyGuessedCardsList.value[24] = true
+
+            }else{
+                correctlyGuessedCardsList.value[int] = true
+            }
         }
         resetGuessedCardsList()
     }
@@ -96,6 +129,7 @@ class MainViewModel: ViewModel(){
             }
         } catch (e:Exception){
             _status.value = ShadifyApiStatus.ERROR
+            println(e)
         }
 
     }

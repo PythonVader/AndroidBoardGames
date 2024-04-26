@@ -138,17 +138,273 @@ fun MemoryGameScreen(mainViewModel: MainViewModel = viewModel()) {
         ShadifyApiStatus.DONE ->Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
             Text(text = "Match The Cards")
             LazyHorizontalGrid(rows = GridCells.Fixed(6)) {
-                    items(24) {
+
+                    item {
                         MemoryCard(
-                            cardContent = memoryGameAdapted.value[it],
+                            cardContent = memoryGameAdapted.value[1],
                             onCardRotated = {
                                 mainViewModel.cardFlip(it)
                             },
                             resetRotation = resetRotations.value,
-                            isCardGuessedCorrectly = guessedCardsList.value[it],
+                            isCardGuessedCorrectly = guessedCardsList.value[1],
                             onCardsReset = { mainViewModel.cardsReset() }
                         )
                     }
+                item {
+                    MemoryCard(
+                        cardContent = memoryGameAdapted.value[2],
+                        onCardRotated = {
+                            mainViewModel.cardFlip(it)
+                        },
+                        resetRotation = resetRotations.value,
+                        isCardGuessedCorrectly = guessedCardsList.value[2],
+                        onCardsReset = { mainViewModel.cardsReset() }
+                    )
+                }
+                item {
+                    MemoryCard(
+                        cardContent = memoryGameAdapted.value[3],
+                        onCardRotated = {
+                            mainViewModel.cardFlip(it)
+                        },
+                        resetRotation = resetRotations.value,
+                        isCardGuessedCorrectly = guessedCardsList.value[3],
+                        onCardsReset = { mainViewModel.cardsReset() }
+                    )
+                }
+                item {
+                    MemoryCard(
+                        cardContent = memoryGameAdapted.value[4],
+                        onCardRotated = {
+                            mainViewModel.cardFlip(it)
+                        },
+                        resetRotation = resetRotations.value,
+                        isCardGuessedCorrectly = guessedCardsList.value[4],
+                        onCardsReset = { mainViewModel.cardsReset() }
+                    )
+                }
+                item {
+                    MemoryCard(
+                        cardContent = memoryGameAdapted.value[5],
+                        onCardRotated = {
+                            mainViewModel.cardFlip(it)
+                        },
+                        resetRotation = resetRotations.value,
+                        isCardGuessedCorrectly = guessedCardsList.value[5],
+                        onCardsReset = { mainViewModel.cardsReset() }
+                    )
+                }
+                item {
+                    MemoryCard(
+                        cardContent = memoryGameAdapted.value[6],
+                        onCardRotated = {
+                            mainViewModel.cardFlip(it)
+                        },
+                        resetRotation = resetRotations.value,
+                        isCardGuessedCorrectly = guessedCardsList.value[6],
+                        onCardsReset = { mainViewModel.cardsReset() }
+                    )
+                }
+                item {
+                    MemoryCard(
+                        cardContent = memoryGameAdapted.value[7],
+                        onCardRotated = {
+                            mainViewModel.cardFlip(it)
+                        },
+                        resetRotation = resetRotations.value,
+                        isCardGuessedCorrectly = guessedCardsList.value[7],
+                        onCardsReset = { mainViewModel.cardsReset() }
+                    )
+                }
+                item {
+                    MemoryCard(
+                        cardContent = memoryGameAdapted.value[8],
+                        onCardRotated = {
+                            mainViewModel.cardFlip(it)
+                        },
+                        resetRotation = resetRotations.value,
+                        isCardGuessedCorrectly = guessedCardsList.value[8],
+                        onCardsReset = { mainViewModel.cardsReset() }
+                    )
+                }
+                item {
+                    MemoryCard(
+                        cardContent = memoryGameAdapted.value[9],
+                        onCardRotated = {
+                            mainViewModel.cardFlip(it)
+                        },
+                        resetRotation = resetRotations.value,
+                        isCardGuessedCorrectly = guessedCardsList.value[9],
+                        onCardsReset = { mainViewModel.cardsReset() }
+                    )
+                }
+                item {
+                    MemoryCard(
+                        cardContent = memoryGameAdapted.value[10],
+                        onCardRotated = {
+                            mainViewModel.cardFlip(it)
+                        },
+                        resetRotation = resetRotations.value,
+                        isCardGuessedCorrectly = guessedCardsList.value[10],
+                        onCardsReset = { mainViewModel.cardsReset() }
+                    )
+                }
+                item {
+                    MemoryCard(
+                        cardContent = memoryGameAdapted.value[11],
+                        onCardRotated = {
+                            mainViewModel.cardFlip(it)
+                        },
+                        resetRotation = resetRotations.value,
+                        isCardGuessedCorrectly = guessedCardsList.value[11],
+                        onCardsReset = { mainViewModel.cardsReset() }
+                    )
+                }
+                item {
+                    MemoryCard(
+                        cardContent = memoryGameAdapted.value[12],
+                        onCardRotated = {
+                            mainViewModel.cardFlip(it)
+                        },
+                        resetRotation = resetRotations.value,
+                        isCardGuessedCorrectly = guessedCardsList.value[12],
+                        onCardsReset = { mainViewModel.cardsReset() }
+                    )
+                }
+                item {
+                    MemoryCard(
+                        cardContent = memoryGameAdapted.value[13],
+                        onCardRotated = {
+                            mainViewModel.cardFlip(it)
+                        },
+                        resetRotation = resetRotations.value,
+                        isCardGuessedCorrectly = guessedCardsList.value[13],
+                        onCardsReset = { mainViewModel.cardsReset() }
+                    )
+                }
+                item {
+                    MemoryCard(
+                        cardContent = memoryGameAdapted.value[14],
+                        onCardRotated = {
+                            mainViewModel.cardFlip(it)
+                        },
+                        resetRotation = resetRotations.value,
+                        isCardGuessedCorrectly = guessedCardsList.value[14],
+                        onCardsReset = { mainViewModel.cardsReset() }
+                    )
+                }
+                item {
+                    MemoryCard(
+                        cardContent = memoryGameAdapted.value[15],
+                        onCardRotated = {
+                            mainViewModel.cardFlip(it)
+                        },
+                        resetRotation = resetRotations.value,
+                        isCardGuessedCorrectly = guessedCardsList.value[15],
+                        onCardsReset = { mainViewModel.cardsReset() }
+                    )
+                }
+                item {
+                    MemoryCard(
+                        cardContent = memoryGameAdapted.value[16],
+                        onCardRotated = {
+                            mainViewModel.cardFlip(it)
+                        },
+                        resetRotation = resetRotations.value,
+                        isCardGuessedCorrectly = guessedCardsList.value[16],
+                        onCardsReset = { mainViewModel.cardsReset() }
+                    )
+                }
+                item {
+                    MemoryCard(
+                        cardContent = memoryGameAdapted.value[17],
+                        onCardRotated = {
+                            mainViewModel.cardFlip(it)
+                        },
+                        resetRotation = resetRotations.value,
+                        isCardGuessedCorrectly = guessedCardsList.value[17],
+                        onCardsReset = { mainViewModel.cardsReset() }
+                    )
+                }
+                item {
+                    MemoryCard(
+                        cardContent = memoryGameAdapted.value[18],
+                        onCardRotated = {
+                            mainViewModel.cardFlip(it)
+                        },
+                        resetRotation = resetRotations.value,
+                        isCardGuessedCorrectly = guessedCardsList.value[18],
+                        onCardsReset = { mainViewModel.cardsReset() }
+                    )
+                }
+                item {
+                    MemoryCard(
+                        cardContent = memoryGameAdapted.value[19],
+                        onCardRotated = {
+                            mainViewModel.cardFlip(it)
+                        },
+                        resetRotation = resetRotations.value,
+                        isCardGuessedCorrectly = guessedCardsList.value[19],
+                        onCardsReset = { mainViewModel.cardsReset() }
+                    )
+                }
+                item {
+                    MemoryCard(
+                        cardContent = memoryGameAdapted.value[20],
+                        onCardRotated = {
+                            mainViewModel.cardFlip(it)
+                        },
+                        resetRotation = resetRotations.value,
+                        isCardGuessedCorrectly = guessedCardsList.value[20],
+                        onCardsReset = { mainViewModel.cardsReset() }
+                    )
+                }
+                item {
+                    MemoryCard(
+                        cardContent = memoryGameAdapted.value[21],
+                        onCardRotated = {
+                            mainViewModel.cardFlip(it)
+                        },
+                        resetRotation = resetRotations.value,
+                        isCardGuessedCorrectly = guessedCardsList.value[21],
+                        onCardsReset = { mainViewModel.cardsReset() }
+                    )
+                }
+                item {
+                    MemoryCard(
+                        cardContent = memoryGameAdapted.value[22],
+                        onCardRotated = {
+                            mainViewModel.cardFlip(it)
+                        },
+                        resetRotation = resetRotations.value,
+                        isCardGuessedCorrectly = guessedCardsList.value[22],
+                        onCardsReset = { mainViewModel.cardsReset() }
+                    )
+                }
+                item {
+                    MemoryCard(
+                        cardContent = memoryGameAdapted.value[23],
+                        onCardRotated = {
+                            mainViewModel.cardFlip(it)
+                        },
+                        resetRotation = resetRotations.value,
+                        isCardGuessedCorrectly = guessedCardsList.value[23],
+                        onCardsReset = { mainViewModel.cardsReset() }
+                    )
+                }
+                item {
+                    MemoryCard(
+                        cardContent = memoryGameAdapted.value.last(),
+                        onCardRotated = {
+                            mainViewModel.cardFlip(it)
+                        },
+                        resetRotation = resetRotations.value,
+                        isCardGuessedCorrectly = guessedCardsList.value[24],
+                        onCardsReset = { mainViewModel.cardsReset() }
+                    )
+                }
+
+
 //                items(4) {
 //                    MemoryCard(
 //                        cardContent = mainUiState.value.memoryGame.grid[it][1],
