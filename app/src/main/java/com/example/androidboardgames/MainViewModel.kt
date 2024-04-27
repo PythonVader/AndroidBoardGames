@@ -5,13 +5,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.androidboardgames.data.ShadifySetPairPositions
 import com.example.androidboardgames.network.ShadifyMathApi
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.forEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlin.properties.Delegates
+import kotlin.random.Random
 
 class MainViewModel: ViewModel(){
     private var _status = MutableStateFlow(ShadifyApiStatus.LOADING)
@@ -37,6 +37,8 @@ class MainViewModel: ViewModel(){
             checkAnswerMemory(newValue.take(3))
         }
     }
+
+    private val myRandomNumbers = List(25) { Random.nextInt() }
 
     private fun checkAnswerMemory(stringList: List<String>) {
         when(stringList){
@@ -139,18 +141,21 @@ class MainViewModel: ViewModel(){
         _status.value = ShadifyApiStatus.LOADING
         try {
             viewModelScope.launch {
-                val listResult = ShadifyMathApi.retrofitService.getMemoryGame()
-                _mainUiState.value.memoryGame = listResult
-                _mainUiState.value.memoryGame.grid.forEach {
-                    it.forEach { element ->
-                        _memoryGameAdapted.value.add(element)
+                runBlocking {
+                    val listResult = ShadifyMathApi.retrofitService.getMemoryGame()
+                    _mainUiState.value.memoryGame = listResult
+                    _mainUiState.value.memoryGame.grid.forEach {
+                        it.forEach { element ->
+                            _memoryGameAdapted.value.add(element)
+                        }
                     }
+                    _memoryGameAdapted.value.forEach { println(it) }
+                    _status.value = ShadifyApiStatus.DONE
+                    Log.d("MEMORYGAME RESULT", "${_mainUiState.value.memoryGame.pairPositions}")
+                    println("MEMORYGAME --------->${_mainUiState.value.memoryGame.grid.size} &&&& the width of it is ${_mainUiState.value.memoryGame.width}")
                 }
-                _memoryGameAdapted.value.forEach { println(it) }
-                _status.value = ShadifyApiStatus.DONE
-                Log.d("MEMORYGAME RESULT", "${_mainUiState.value.memoryGame.pairPositions}")
-                println("MEMORYGAME --------->${_mainUiState.value.memoryGame.grid.size} &&&& the width of it is ${_mainUiState.value.memoryGame.width}")
             }
+
         } catch (e:Exception){
             _status.value = ShadifyApiStatus.ERROR
         }
