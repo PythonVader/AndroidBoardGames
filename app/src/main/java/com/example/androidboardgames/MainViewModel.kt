@@ -1,5 +1,6 @@
 package com.example.androidboardgames
 
+import android.os.CountDownTimer
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,6 +9,7 @@ import com.example.androidboardgames.network.ShadifyMathApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlin.properties.Delegates
@@ -20,8 +22,14 @@ class MainViewModel: ViewModel(){
     private var _mainUiState = MutableStateFlow(MainUiState())
     val mainUiState = _mainUiState.asStateFlow()
 
+    private var _numbersUiState = MutableStateFlow(NumbersUiState())
+    val numbersUiState = _numbersUiState.asStateFlow()
+
     private var _memoryGameAdapted = MutableStateFlow(arrayListOf(""))
     val memoryGameAdapted = _memoryGameAdapted.asStateFlow()
+
+    private val _timerValue = MutableStateFlow(0)
+    val timerValue = _timerValue.asStateFlow()
 
     private var _isAnswerCorrect = MutableStateFlow(false)
     val isAnswerCorrect = _isAnswerCorrect.asStateFlow()
@@ -38,7 +46,101 @@ class MainViewModel: ViewModel(){
         }
     }
 
-    private val myRandomNumbers = List(25) { Random.nextInt() }
+    private var numbersGameSolution: List<Int> = listOf(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25)
+
+    fun startNumbersGame(){
+        _numbersUiState.update {
+            it.copy(
+                state = NumbersGameStatus.STARTED,
+                myRandomNumbers = listOf(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25).shuffled()
+//
+//                generateSequence {
+//                    // this lambda is the source of the sequence's values
+//                    Random.nextInt(0,25)
+//                }
+//                    // make the values distinct, so there's no repeated ints
+//                    .distinct()
+//                    // only fetch 6 values
+//                    // Note: It's very important that the source lambda can provide
+//                    //       this many distinct values! If not, the stream will
+//                    //       hang, endlessly waiting for more unique values.
+//                    .take(25)
+//                    .toList(),
+
+            )
+        }
+        object : CountDownTimer(120000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                _timerValue.value = (millisUntilFinished / 1000).toInt()
+            }
+
+            override fun onFinish() {
+                onNumbersGameFinish()
+            }
+        }.start()
+        //Start Timer Here
+//        numbersGameSolution = ArrayList(_numbersUiState.value.myRandomNumbers.sorted())
+
+    }
+
+    private fun onNumbersGameFinish(){
+        checkNumbersGameSolution()
+        _numbersUiState.update {
+            it.copy(
+                isGameOver = true,
+                )
+        }
+    }
+
+
+    fun addNumberGameGuess(numberAdded: Int){
+        if (_numbersUiState.value.guessedNumbers.size == 24){
+            _numbersUiState.value.guessedNumbers.add(numberAdded)
+            checkNumbersGameSolution()
+        }else{
+            _numbersUiState.value.guessedNumbers.add(numberAdded)
+            println(numberAdded)
+        }
+    }
+
+    private fun checkNumbersGameSolution() {
+        if (numbersGameSolution == _numbersUiState.value.guessedNumbers.toList()){
+            println("$numbersGameSolution \n and the answers were ")
+            _numbersUiState.value.guessedNumbers.forEach { println(it) }
+            numbersGameWon()
+        } else {
+            numbersGameRetry()
+        }
+    }
+
+    private fun numbersGameRetry() {
+        _numbersUiState.update {
+            it.copy(
+                isGameWrong = true
+            )
+        }
+    }
+
+    fun resetGame(){
+        _numbersUiState.update {
+            it.copy(
+                state = NumbersGameStatus.LOADING,
+                guessedNumbers = arrayListOf(),
+                isGameWon = false,
+                isGameWrong = false,
+                isGameReset = true
+            )
+        }
+        startNumbersGame()
+    }
+    private fun numbersGameWon() {
+        _numbersUiState.update {
+            it.copy(
+                isGameWon = true
+            )
+        }
+    }
+
 
     private fun checkAnswerMemory(stringList: List<String>) {
         when(stringList){
