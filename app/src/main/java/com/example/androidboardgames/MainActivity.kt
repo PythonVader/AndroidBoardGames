@@ -8,6 +8,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.FloatRange
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -781,6 +782,7 @@ fun MemoryCard(cardContent:String, onCardRotated: (String) -> Unit, isCardGuesse
             },
         shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(MaterialTheme.colorScheme.primaryContainer),
+        border = if(isCardGuessedCorrectly) BorderStroke(3.dp, Color.Green) else null,
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
         if (isCardGuessedCorrectly){
