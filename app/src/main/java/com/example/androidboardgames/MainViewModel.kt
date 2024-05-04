@@ -75,7 +75,7 @@ class MainViewModel: ViewModel(){
             }
 
             override fun onFinish() {
-                onNumbersGameFinish()
+                onNumbersGameFinish(120 - _timerValue.value)
             }
         }.start()
         //Start Timer Here
@@ -83,11 +83,12 @@ class MainViewModel: ViewModel(){
 
     }
 
-    private fun onNumbersGameFinish(){
+    private fun onNumbersGameFinish(millisUntilFinish: Int){
         checkNumbersGameSolution()
         _numbersUiState.update {
             it.copy(
                 isGameOver = true,
+                finalGameScore = millisUntilFinish
                 )
         }
     }

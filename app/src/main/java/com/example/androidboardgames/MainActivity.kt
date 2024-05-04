@@ -115,13 +115,14 @@ fun NumbersGameScreen(mainViewModel: MainViewModel = viewModel()) {
             restartGame = {mainViewModel.resetGame()},
             onPlayAgain = {},
             isGameReset = numbersGameState.value.isGameReset,
-            timerValue = timerValue.value
+            timerValue = timerValue.value,
+            finalScore = numbersGameState.value.finalGameScore
         )
     }
 }
 
 @Composable
-fun NumbersGameContent(isGameWrong: Boolean, listOfRandomNumbers: List<Int>, onNumberAdded: (Int) -> Unit, restartGame: () -> Unit, isGameWon: Boolean,isGameReset: Boolean, isGameOver: Boolean, onPlayAgain: () -> Unit, timerValue: Int) {
+fun NumbersGameContent(isGameWrong: Boolean, listOfRandomNumbers: List<Int>, onNumberAdded: (Int) -> Unit, restartGame: () -> Unit, finalScore: Int, isGameWon: Boolean,isGameReset: Boolean, isGameOver: Boolean, onPlayAgain: () -> Unit, timerValue: Int) {
     Column(modifier = Modifier
         .padding(12.dp),
         verticalArrangement = Arrangement.Center,
@@ -328,8 +329,8 @@ fun NumbersGameContent(isGameWrong: Boolean, listOfRandomNumbers: List<Int>, onN
             if (isGameOver || isGameWon) {
                 FinalScoreDialog(
                     result = if (isGameWon) "CONGRATULATIONS!" else "GAME OVER!",
-                    score = 120-timerValue,
-                    onPlayAgain = { /*TODO*/ })
+                    score = finalScore,
+                    onPlayAgain = { onPlayAgain() })
             }
             if (isGameWrong) {
                 Image(
@@ -753,15 +754,6 @@ fun MemoryCard(cardContent:String, onCardRotated: (String) -> Unit, isCardGuesse
     val rotation by animateFloatAsState(targetValue = if(rotated) 180f else 0f,
         animationSpec = tween(100), label = ""
     )
-
-//    LaunchedEffect(Unit){
-//        if(isCardGuessedCorrectly){
-//            rotated = true
-//        }else if (resetRotation){
-//            rotated = false
-//            onCardsReset()
-//        }
-//    }
 
     val imageResource  = when(cardContent){
         "a" -> R.drawable.icons8_iron_man
